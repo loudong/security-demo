@@ -66,9 +66,9 @@ router.get('/login', async (ctx) => {
     await ctx.render('login');
 });
 
-const encryptPassword = require('./password')
+// const encryptPassword = require('./password')
 router.post('/login', async (ctx) => {
-
+    // const saltPassword = require('./password')
     const { username, password } = ctx.request.body
 
     // 可注入写法
@@ -80,11 +80,35 @@ router.post('/login', async (ctx) => {
     `
     console.log('sql', sql)
     res = await query(sql)
+    // res = await query(sql, [username, password])
     console.log('db', res)
     if (res.length !== 0) {
         ctx.redirect('/?from=china')
         ctx.session.username = ctx.request.body.username
     }
+
+    // 没有加密
+    // if(res.length !== 0 && res[0].salt === null) {
+    //     console.log('no salt')
+    //     if(password === res[0].password){
+    //          sql = `
+    //             update test.user
+    //             set salt = ?,
+    //             password = ?
+    //             where username = ?
+    //         `
+    //         const salt = Math.random()*99999 + new Date().getTime()
+    //         res = query(sql, [salt, saltPassword(salt, password), username])
+    //         ctx.session.username = ctx.request.body.username
+    //         ctx.redirect('/?from=china')
+    //     }
+    // } else {
+    //     console.log('has salt')
+    //     if(saltPassword(res[0].salt,password) === res[0].password){
+    //         ctx.session.username = ctx.request.body.username
+    //         ctx.redirect('/?from=china')
+    //     }
+    // }
 });
 
 router.post('/updateText', async (ctx) => {
