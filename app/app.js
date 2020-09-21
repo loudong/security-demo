@@ -76,7 +76,7 @@ router.post('/login', async (ctx) => {
     SELECT *
     FROM test.user
     WHERE username = '${username}'
-    AND password = '${password}'
+    -- AND password = '${password}'
     `
     console.log('sql', sql)
     res = await query(sql)
@@ -102,7 +102,7 @@ router.post('/login', async (ctx) => {
     //         ctx.session.username = ctx.request.body.username
     //         ctx.redirect('/?from=china')
     //     }
-    // } else {
+    // } else if(res.length !== 0 && res[0].salt !== null) {
     //     console.log('has salt')
     //     if(saltPassword(res[0].salt,password) === res[0].password){
     //         ctx.session.username = ctx.request.body.username
